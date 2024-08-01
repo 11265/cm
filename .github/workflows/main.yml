@@ -1,0 +1,37 @@
+name: Build iOS Jailbreak Tweak
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Theos
+      run: |
+        brew install ldid xz
+        git clone --recursive https://github.com/theos/theos.git $THEOS
+        echo "THEOS=${THEOS}" >> $GITHUB_ENV
+
+    - name: Install iOS SDK
+      run: |
+        curl -LO https://github.com/theos/sdks/archive/master.zip
+        unzip master.zip -d $THEOS/sdks
+        mv $THEOS/sdks/sdks-master/*.sdk $THEOS/sdks/
+        rm -rf master.zip $THEOS/sdks/sdks-master
+
+    - name: Build Tweak
+      run: |
+        make package THEOS=$THEOS
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: mytouchtweak
+        path: packages/*.deb
