@@ -1,0 +1,9 @@
+Package: com.yourusername.mytouchtweak
+Name: MyTouchTweak
+Version: 1.0
+Architecture: iphoneos-arm
+Description: A tweak using PTFakeTouch
+Maintainer: Your Name
+Author: Your Name
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
